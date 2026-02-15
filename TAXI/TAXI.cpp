@@ -27,6 +27,7 @@ float zysk_netto(float, float, float, float,float,float,float);
 void pokaz_wariant(const char* opis, float paliwo, float spalanie, float ilosc_kursow, float kwota_za_kurs, float koszty_stale, float ilosc_godzin1, float ilosc_godzin2, float ilosc_godzin3, float kurs);
 int minimum_godzin(float,float,float,float,float,float);
 float koszt_na_kilometr(float, float);
+float koszty_paliwa(float, float,float,float,float);
 int main()
 {
 	float koszty_stale;
@@ -81,6 +82,13 @@ float koszt_na_kilometr(float paliwo, float spalanie) {
 	return koszt;
 }
 void pokaz_wariant(const char* opis, float paliwo, float spalanie, float ilosc_kursow, float kwota_za_kurs, float koszty_stale, float ilosc_godzin1, float ilosc_godzin2, float ilosc_godzin3, float kurs) {
+	float koszt1 = 0;
+	float koszt2 = 0;
+	float koszt3 = 0;
+	koszt1 = koszty_paliwa(paliwo, spalanie, ilosc_kursow, kurs, ilosc_godzin1);
+	koszt2 = koszty_paliwa(paliwo, spalanie, ilosc_kursow, kurs, ilosc_godzin2);
+	koszt3 = koszty_paliwa(paliwo, spalanie, ilosc_kursow, kurs, ilosc_godzin3);
+	
 	cout << opis << endl;
 	cout << "Cena paliwa: " << paliwo << endl;
 	cout << "Spalanie: " << spalanie << endl;
@@ -91,10 +99,12 @@ void pokaz_wariant(const char* opis, float paliwo, float spalanie, float ilosc_k
 	cout << "Zysk na godziny miesiecznie: 40: " << zysk_netto(ilosc_godzin1, ilosc_kursow, kwota_za_kurs, koszty_stale, paliwo, spalanie, kurs)
 		<< "zl 60: " << zysk_netto(ilosc_godzin2, ilosc_kursow, kwota_za_kurs, koszty_stale, paliwo, spalanie, kurs)
 		<< "zl 600: " << zysk_netto(ilosc_godzin3, ilosc_kursow, kwota_za_kurs, koszty_stale, paliwo, spalanie, kurs) << "zl" << endl;
+	cout << "Koszty paliwa: 40: " << koszt1 << "zl 60: " << koszt2
+		 << "zl 600: " << koszt3  << "zl" << endl;
 	
-	
-	//godziny = minimum_godzin(ilosc_kursow, kwota_za_kurs, koszty_stale, paliwo, spalanie, kurs);
-	//cout << "Minimalna ilosc godzin dla " << opis << godziny << endl << endl;
+	int godziny = 0;
+	godziny = minimum_godzin(ilosc_kursow, kwota_za_kurs, koszty_stale, paliwo, spalanie, kurs);
+	cout << "Minimalna ilosc godzin dla " << opis << godziny << endl << endl;
 }
 int minimum_godzin(float ilosc_kursow, float kwota_za_kurs, float koszty_stale, float paliwo, float spalanie, float kurs) {
 	float zysk_na_godzine = 0;
@@ -110,4 +120,8 @@ int minimum_godzin(float ilosc_kursow, float kwota_za_kurs, float koszty_stale, 
 		godziny++;
 	}
 	return godziny;
+}
+float koszty_paliwa(float paliwo, float spalanie, float ilosc_kursow, float kurs,float ilosc_godzin) {
+	float koszt = koszt_na_kilometr(paliwo, spalanie)*ilosc_kursow*kurs*ilosc_godzin;
+	return koszt;
 }
