@@ -13,13 +13,13 @@ const float wbitka = 200;
 const float kurs = 7; //odległość (km)
 float ilosc_godzin1 = 40;
 float ilosc_godzin2 = 60;
-float ilosc_godzin3 = 80;
+float ilosc_godzin3 = 600;
 float ilosc_kursow1 = 2;
 float ilosc_kursow2 = 2.5;
 float ilosc_kursow3 = 3;
 float kwota_za_kurs1 = 20;
 float kwota_za_kurs2 = 30;
-float kwota_za_kurs3 = 40;
+float kwota_za_kurs3 = 21;
 
 float zysk_brutto(float,float,float);
 float koszty_stale_miesiecznie(float);
@@ -38,12 +38,16 @@ int main()
 	float zysk_netto60 = 0;
 	float zysk_netto80 = 0;
 	koszty_stale = koszty_stale_miesiecznie(ubezpieczenie);
+	float corolla_paliwo = 2.8;
+	float corolla_spalanie = 5;
 	
 	
-	pokaz_wariant("Najlepsza opcja:", paliwo1, spalanie1, ilosc_kursow3, kwota_za_kurs3, koszty_stale, ilosc_godzin1, ilosc_godzin2, ilosc_godzin3, kurs);
-	pokaz_wariant("Cos pomiedzy:", paliwo2, spalanie2, ilosc_kursow2, kwota_za_kurs2, koszty_stale, ilosc_godzin1, ilosc_godzin2, ilosc_godzin3, kurs);
-	pokaz_wariant("Najgorsza opcja:", paliwo3, spalanie3, ilosc_kursow1, kwota_za_kurs1, koszty_stale, ilosc_godzin1, ilosc_godzin2, ilosc_godzin3, kurs);
-	
+	pokaz_wariant("Xsara: ", paliwo1, spalanie1, ilosc_kursow3, kwota_za_kurs3, koszty_stale, ilosc_godzin1, ilosc_godzin2, ilosc_godzin3, kurs);
+	//pokaz_wariant("Cos pomiedzy:", paliwo2, spalanie2, ilosc_kursow2, kwota_za_kurs2, koszty_stale, ilosc_godzin1, ilosc_godzin2, ilosc_godzin3, kurs);
+	//pokaz_wariant("Najgorsza opcja:", paliwo3, spalanie3, ilosc_kursow1, kwota_za_kurs1, koszty_stale, ilosc_godzin1, ilosc_godzin2, ilosc_godzin3, kurs);
+	pokaz_wariant("Corolla: ",corolla_paliwo,corolla_spalanie,ilosc_kursow3,kwota_za_kurs3,koszty_stale,ilosc_godzin1,ilosc_godzin2, ilosc_godzin3,kurs);
+	//cout << "Dupa" << endl;
+	return 0;
 }
 float zysk_brutto(float godziny,float ilosc_kursow,float kwota) {
 	float wynik = 0;
@@ -86,14 +90,19 @@ void pokaz_wariant(const char* opis, float paliwo, float spalanie, float ilosc_k
 	cout << "Koszty stale miesieczne: " << koszty_stale << endl;
 	cout << "Zysk na godziny miesiecznie: 40: " << zysk_netto(ilosc_godzin1, ilosc_kursow, kwota_za_kurs, koszty_stale, paliwo, spalanie, kurs)
 		<< "zl 60: " << zysk_netto(ilosc_godzin2, ilosc_kursow, kwota_za_kurs, koszty_stale, paliwo, spalanie, kurs)
-		<< "zl 80: " << zysk_netto(ilosc_godzin3, ilosc_kursow, kwota_za_kurs, koszty_stale, paliwo, spalanie, kurs) << "zl" << endl;
-	int godziny = 0;
-	godziny = minimum_godzin(ilosc_kursow, kwota_za_kurs, koszty_stale, paliwo, spalanie, kurs);
-	cout << "Minimalna ilosc godzin dla " << opis << godziny << endl << endl;
+		<< "zl 600: " << zysk_netto(ilosc_godzin3, ilosc_kursow, kwota_za_kurs, koszty_stale, paliwo, spalanie, kurs) << "zl" << endl;
+	
+	
+	//godziny = minimum_godzin(ilosc_kursow, kwota_za_kurs, koszty_stale, paliwo, spalanie, kurs);
+	//cout << "Minimalna ilosc godzin dla " << opis << godziny << endl << endl;
 }
 int minimum_godzin(float ilosc_kursow, float kwota_za_kurs, float koszty_stale, float paliwo, float spalanie, float kurs) {
 	float zysk_na_godzine = 0;
 	zysk_na_godzine = ilosc_kursow * kwota_za_kurs - koszt_na_kilometr(paliwo, spalanie) * kurs * ilosc_kursow;
+	if (zysk_na_godzine <= 0) {
+		cout << "Zysk na godzinę jest mniejszy lub równy zero! Nie można obliczyć minimalnej liczby godzin." << endl;
+		return -1;
+	}
 	int godziny = 0;
 	int zysk = 0;
 	while (zysk < koszty_stale) {
